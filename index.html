@@ -1,0 +1,233 @@
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+      }
+
+      .title {
+        font-size: 24px;
+        font-weight: bold;
+        color: brown;
+      }
+
+      .products {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 10px;
+      }
+
+      .product {
+        width: 150px;
+        height: 200px;
+        margin: 10px;
+        border: 1px solid black;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px grey;
+      }
+
+      .product img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      .product h3 {
+        text-align: center;
+        margin: 5px;
+      }
+
+      .product p {
+        text-align: center;
+        margin: 5px;
+        color: green;
+      }
+
+      .product input {
+        display: block;
+        width: 50px;
+        margin: 0 auto;
+      }
+
+      .summary {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 10px;
+      }
+
+      .summary h2 {
+        font-size: 20px;
+        font-weight: bold;
+        color: brown;
+      }
+
+      .summary ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .summary li span {
+        font-weight: bold;
+      }
+
+      .summary p {
+        font-size: 18px;
+        font-weight: bold;
+        color: green;
+      }
+
+      .summary button {
+        width: 100px;
+        height: 40px;
+        border: none;
+        border-radius: 10px;
+        background-color: brown;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+    <title>Task 2</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="title">Build Your Own Chocolate Pack</div>
+      <p>*Use arrows in the input to change the quantities </p>
+      <div class="products">
+        <div class="product" data-name="Dark Chocolate" data-price="50">
+          <img
+            src="https://images.unsplash.com/photo-1604514813560-1e4f5726db65?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Dark Chocolate"
+          />
+          <h3>Dark Chocolate</h3>
+          <p>₹50</p>
+          <input
+            type="number"
+            min="0"
+            max="8"
+            value="0"
+            onkeydown="return false"
+            onchange="updateSummary()"
+          />
+        </div>
+        <div class="product" data-name="Milk Chocolate" data-price="40">
+          <img
+            src="https://images.unsplash.com/photo-1548907040-4baa42d10919?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Milk Chocolate"
+          />
+          <h3>Milk Chocolate</h3>
+          <p>₹40</p>
+          <input
+            type="number"
+            min="0"
+            max="8"
+            value="0"
+            onkeydown="return false"
+            onchange="updateSummary()"
+          />
+        </div>
+        <div class="product" data-name="White Chocolate" data-price="60">
+          <img
+            src="https://images.unsplash.com/photo-1620567783985-5a28560bce6b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="White Chocolate"
+          />
+          <h3>White Chocolate</h3>
+          <p>₹60</p>
+          <input
+            type="number"
+            min="0"
+            max="8"
+            value="0"
+            onkeydown="return false"
+            onchange="updateSummary()"
+          />
+        </div>
+        <div class="product" data-name="Fruit Chocolate" data-price="70">
+          <img
+            src="https://images.unsplash.com/photo-1526823127573-0fda76b6c24f?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Fruit Chocolate"
+          />
+          <h3>Fruit Chocolate</h3>
+          <p>₹70</p>
+          <input
+            type="number"
+            min="0"
+            max="8"
+            value="0"
+            onkeydown="return false"
+            onchange="updateSummary()"
+          />
+        </div>
+      </div>
+      <div class="summary">
+        <h2>Your Custom Pack</h2>
+        <ul id="summary-items">
+        </ul>
+        <p id="summary-total">Total: ₹0</p>
+        <button id="summary-button" onclick="placeOrder()">Place Order</button>
+      </div>
+    </div>
+    <script>
+      const summaryItems = document.getElementById("summary-items");
+      const summaryTotal = document.getElementById("summary-total");
+      const summaryButton = document.getElementById("summary-button");
+      let totalQuant;
+
+      function updateSummary() {
+        
+        const products = document.getElementsByClassName("product");
+
+        let items = 0;
+        let total = 0;
+
+        for (let product of products) {
+          let name = product.dataset.name;
+          let price = parseInt(product.dataset.price);
+          let quantity = parseInt(product.querySelector("input").value);
+
+          items += quantity;
+          total += price * quantity;
+        }
+        totalQuant = items;
+        if(totalQuant > 8){
+            alert("The total number of items in the custom pack should not exceed 8")
+            return;
+        }
+        summaryItems.innerHTML = "";
+
+        for (let product of products) {
+          let name = product.dataset.name;
+          let quantity = parseInt(product.querySelector("input").value);
+
+          if (quantity > 0) {
+            let summaryItem = document.createElement("li");
+
+            summaryItem.innerHTML = `<span>${name}</span> x ${quantity}`;
+
+            summaryItems.appendChild(summaryItem);
+          }
+        }
+
+        summaryTotal.innerHTML = `Total: ₹${total}`;
+
+        if (items == 8) {
+          summaryButton.disabled = false;
+        } else {
+          summaryButton.disabled = true;
+        }
+      }
+
+      function placeOrder() {
+        alert("Your order has been placed successfully!");
+      }
+    </script>
+  </body>
+</html>
